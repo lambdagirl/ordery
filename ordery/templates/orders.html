@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block page_content %}
+
+<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+    <thead>
+        <th class="active">id</th>
+        <th class="active">order number</th>
+        <th class="active">order date</th>
+        <th class="active">order quantity</th>
+        <th class='active'>product id</th>
+        <th class='active'></th>
+        <th class='active'></th>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+            <!-- tr -->
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.ord_nbr }}</td>
+                <td>{{ order.ord_date }}</td>
+                <td>{{ order.ord_qty }}</td>
+                <td>{{ order.prod_id }}</td>
+                <td><a href="{{ url_for('orders.update', id=order.id) }}" role ="button">Edit</a>
+                <td><a href="{{ url_for('orders.delete', id=order.id) }}" role ="button">Delete</a>
+            </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal"> ADD </button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog"> <div class="modal-content">
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title" id="myModalLabel" align="center">add new </h4>
+        </div>
+
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2"> {{ wtf.quick_form(form, form_type="horizontal") }} </div>
+            </div>
+        </div> <!-- modal body -->
+
+      </div> </div>
+  </div>
+
+
+
+{% endblock %}

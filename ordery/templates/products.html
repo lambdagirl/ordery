@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block page_content %}
+
+<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+    <thead>
+        <th class="active">id</th>
+        <th class="active">product number</th>
+        <th class="active">prod_line</th>
+        <th class="active">size</th>
+        <th class='active'>color</th>
+        <th class='active'>price</th>
+
+        <th> </th>
+
+    </thead>
+    <tbody>
+        {% for product in products %}
+            <!-- tr -->
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>{{ product.prod_nbr }}</td>
+                <td>{{ product.prod_line }}</td>
+                <td>{{ product.size }}</td>
+                <td>{{ product.color }}</td>
+                <td>{{ product.price }}</td>
+                <td><a href="{{ url_for('products.update_product', id=product.id) }}" role ="button">Edit</a>
+
+            </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#ADD"> Add </button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="ADD" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog"> <div class="modal-content">
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title" id="myModalLabel" align="center">add new order</h4>
+        </div>
+
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2"> {{ wtf.quick_form(form, form_type="horizontal") }} </div>
+            </div>
+        </div> <!-- modal body -->
+
+      </div> </div>
+  </div>
+
+{% endblock %}

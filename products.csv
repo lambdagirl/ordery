@@ -1,0 +1,14 @@
+prod_nbr,prod_line,size,color,price
+tray-lw,tray,Large,White,12.75
+tray-lg,tray,Large,Green,12.75
+tray-mw,tray,Medium,White,11.5
+tray-mg,tray,Medium,Green,11.5
+vial-lw,vialholder,Large,White,9
+vial-lg,vialholder,Large,Green,9
+vial-mw,vialholder,Medium,White,7.5
+vial-mg,vialholder,Medium,Green,7.5
+vial-sw,vialholder,Small,White,15.5
+vial-sg,vialholder,Small,Green,15.5
+sample-c,samplecontainer,Medium,Clear,14.25
+sample-g,samplecontainer,Medium,White,11.5
+sample-g,samplecontainer,Medium,White,30.0
