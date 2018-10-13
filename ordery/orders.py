@@ -1,7 +1,7 @@
 from flask import (Blueprint, flash, g, redirect,
                     render_template, request, url_for, session)
 from werkzeug.exceptions import abort
-from . forms import AddOrdersForm, LoginForm,CSVForm
+from . forms import AddOrdersForm, LoginForm,CSVForm,SearchForm
 from ordery.db import get_db
 from flask_login import login_required, login_user, logout_user, current_user
 from . auth import login_required
@@ -11,6 +11,7 @@ from flask import current_app
 from . product_csv import product_csv
 from . order_csv import order_csv
 from . date import create_date_table, create_view, get_weekly_data
+from flask import g
 
 bp = Blueprint('orders', __name__)
 
@@ -21,7 +22,7 @@ def index():
     form = AddOrdersForm()
     if request.method == 'GET':
         orders = db.execute(
-        'SELECT id, ord_nbr, ord_date, ord_qty, prod_id FROM orders'
+        'SELECT id, ord_nbr, ord_date, ord_qty, prod_id FROM orders ORDER BY ord_date DESC'
         ).fetchall()
         return render_template('orders.html', orders = orders, form = form)
     else:
@@ -94,8 +95,6 @@ def update(id):
         return render_template('update.html', form=form)
 
 
-
-
 @bp.route('/csv', methods=('GET', 'POST'))
 @login_required
 def upload_csv():
@@ -116,18 +115,58 @@ def upload_csv():
             return redirect(url_for('orders.index'))
         else:
             flash("Please enter valid type!")
-        create_date_table()
-        create_view()
+
     return render_template('csv.html', form=form)
+
+
+@bp.route('/dashboard', methods=('GET', 'POST'))
+@login_required
+def dashboard():
+    create_date_table()
+    db = get_db()
+    best_sellers = db.execute(''' SELECT P.prod_nbr,
+        price * ord_qty AS Total_Sales
+      FROM products P
+         INNER JOIN orders O ON P.id = O.prod_id
+      GROUP BY P.id
+      ORDER BY Total_Sales DESC
+      Limit 1
+    ;''').fetchone()
+    total_amount = db.execute('''SELECT SUM (Total_Sales) AS total
+        FROM (
+        SELECT price * ord_qty AS Total_Sales
+          FROM products P
+             INNER JOIN orders O ON P.id = O.prod_id
+         );''').fetchone()
+    total_orders = db.execute('''  SELECT
+            count(ord_nbr) AS Order_Count,
+            sum(ord_qty)   AS Order_Quauntity
+          FROM products P
+            INNER JOIN orders O ON P.id = O.prod_id;
+        ''').fetchone()
+    sales_record = db.execute('''SELECT date, sum(ord_qty) AS sum_ord_qty
+            FROM products P
+              INNER JOIN orders O ON P.id       = O.prod_id
+              INNER JOIN dates  D ON O.ord_date = D.date
+           GROUP BY date
+order by sum_ord_qty desc
+limit 1;
+    ''').fetchone()
+    return render_template('dashboard.html', sales_record = sales_record,best_sellers = best_sellers, total_orders = total_orders,total_amount = total_amount)
 
 
 @bp.route('/report', methods=('GET', 'POST'))
 @login_required
 def report():
     db = get_db()
+    create_view()
     labels = ["SUNDAY", "MONDAY", "TUESDAY","WEDNESDAY", "THURSDAY","FRIDAY","SATURDAY"]
     rows = db.execute('SELECT ord_amt, day_name FROM v_ord;').fetchall()
     values = get_weekly_data(rows)
     print(values)
-
     return render_template('report.html', values=values, labels=labels)
+
+
+@bp.before_app_request
+def before_request():
+    g.search_form = SearchForm()

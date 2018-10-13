@@ -1,7 +1,7 @@
 from flask import (Blueprint, flash, g, redirect,
                     render_template, request, url_for, session)
 from werkzeug.exceptions import abort
-from . forms import AddOrdersForm, LoginForm, AddProductsForm,CSVForm
+from . forms import AddOrdersForm, LoginForm, AddProductsForm,CSVForm,SearchForm
 from ordery.db import get_db
 from flask_login import login_required, login_user, logout_user, current_user
 from . auth import login_required
@@ -75,3 +75,18 @@ def update_product(id):
             form.color.data = product['color']
             form.price.data = product['price']
         return render_template('update.html', form=form)
+
+
+@bp.route('/search')
+@login_required
+def search():
+        if not g.search_form.validate():
+            return redirect(url_for('orders.index'))
+        db = get_db()
+        word = g.search_form.q.data
+        products = db.execute('''SELECT rowid, prod_nbr, prod_line, size, color, price
+                    FROM products_index
+                    WHERE Products_index
+                    MATCH ?''', (word,)
+                    ).fetchall()
+        return render_template('search.html', products = products)

@@ -3,20 +3,14 @@
 
 {% block head%}
 {{ super() }}
-<link rel = "shortcut icon" href = "{{ url_for('static', filename = 'favicon.ico')}}"
-			type = "image/x-icon">
-<link rel="icon" href = "{{ url_for('static', filename = "favicon.ico")}}"
-			type = "image/x-icon">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta charset="utf-8">
 
 {% endblock %}
-
-
 
 {% block scripts %}
 {{ super() }}
 {% endblock %}
-
-
 
 {% block title %}Ordery{% endblock %}
 {% block navbar %}
@@ -31,36 +25,103 @@
 				<span class = "icon-bar"></span>
 				<span class = "icon-bar"></span>
 			</button>
-			<a class = "navbar-brand" href = "/"> Home</a>
+			<a class = "navbar-brand " href = "/"> Home</a>
+			{% if g.search_form %}
+				<form class="navbar-form navbar-left" method="get"  action="{{ url_for('products.search') }}">
+				 <div class="form-group ">
+						{{ g.search_form.q(size=20, class='form-control', placeholder=g.search_form.q.label.text) }}
+				 </div>
+			 </form>
+			{% endif %}
 
 		</div>
-		<div class = "navbar-collapse collapse">
-			<ul class = "nav navbar-nav">
-				<li><a href="/"> Orders </a></li>
-				<li><a href="{{ url_for('products.pd_index') }}"> Products </a></li>
-				<li><a href="{{ url_for('orders.report') }}"> Report </a></li>
-				<li><a href="{{ url_for('orders.upload_csv') }}"> CSV upload</a></li>
-
-			</ul>
 			<ul class="nav navbar-nav pull-right">
 				{% if g.user %}
-					<li><span>{{ g.user['username'] }}</span>
-					<li><a href="{{ url_for('auth.logout') }}">Log Out</a>
+					<li class = "nav ">{{ g.user['username'] }}</li>
+					<li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
 				{% else %}
-					<li><a href="{{ url_for('auth.login') }}">Log In</a>
+					<li><a href="{{ url_for('auth.login') }}">Log In</a></li>
 				{% endif %}
 			</ul>
-		</div>
 	</div>
 </div>
 
+    <div class="container-fluid" >
+      <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+          <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link active" href="{{ url_for('orders.dashboard')}}">
+                  <span data-feather="home"></span>
+                  Dashboard <span class="sr-only">(current)</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/">
+                  Orders
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('products.pd_index') }}">
+                  Products
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('orders.upload_csv') }}">
+                  CSV upload
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('orders.report') }}">
+                  Reports
+                </a>
+              </li>
+            </ul>
 
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+              <span>Saved reports</span>
+              <a class="d-flex align-items-center text-muted" href="#">
+                <span data-feather="plus-circle"></span>
+              </a>
+            </h6>
+            <ul class="nav flex-column mb-2">
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="file-text"></span>
+                  Current month
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="file-text"></span>
+                  Last quarter
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="file-text"></span>
+                  Social engagement
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="file-text"></span>
+                  Year-end sale
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
 
 
 {% endblock %}
 
 {% block content %}
+
 	<div class = "container">
+		<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-2">
+
 		{% for message in get_flashed_messages() %}
 		<div class="alert alert-warning">
 			<button type = "button" class="close" data-dismiss="alert">&times;</button>
@@ -68,8 +129,7 @@
 		</div>
 		{% endfor %}
 
-
-
-		{% block page_content%} {% endblock %}
+		{% block page_content%}
+		{% endblock %}
 	</div>
 {% endblock %}

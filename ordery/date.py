@@ -59,9 +59,10 @@ def create_date_table():
 def create_view():
     db = get_db()
     db.executescript('''
-    DROP VIEW IF EXISTS v_ord;
+     DROP VIEW IF EXISTS v_ord;
     CREATE VIEW IF NOT EXISTS v_ord AS
-    SELECT sum(O.ord_qty),
+    SELECT P.prod_nbr, P.prod_line, P.color, P.size, P.price,
+           O.ord_nbr, O.ord_qty,
            P.price * ifnull( O.ord_qty, 0) AS ord_amt,
            D.date, D.month,
            CASE D.day WHEN '0' THEN 'SUNDAY'
@@ -74,9 +75,8 @@ def create_view():
                       ELSE 'OTHER' END AS day_name
      FROM products P
           INNER JOIN orders O ON P.id      = O.prod_id
-          INNER JOIN dates  D ON O.ord_date = D.date
-    WHERE date BETWEEN datetime('now', '-380 days') AND datetime('now', 'localtime')
-       GROUP BY date;       ''')
+          INNER JOIN dates  D ON O.ord_date = D.date;
+ ''')
     db.commit()
 
 

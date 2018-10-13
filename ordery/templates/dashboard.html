@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block page_content %}
+
+<div class="container col-sm-6">
+  <div class="panel panel-default">
+    <div class="panel-heading">Total Sales</div>
+    <div class="panel-body"><h3>${{total_amount.total}}</h3></div>
+  </div>
+</div>
+
+<div class="container col-sm-6">
+  <div class="panel panel-default">
+    <div class="panel-heading">Total Orders</div>
+    <div class="panel-body col-sm-5">Orders: <h3>{{total_orders.Order_Count}}</h3></div>
+		<div class="panel-body">Order quantity: <h3>{{total_orders.Order_Quauntity}}</h3></div>
+  </div>
+</div>
+
+<div class="container col-sm-6">
+  <div class="panel panel-default">
+    <div class="panel-heading">Best Seller</div>
+    <div class="panel-body col-sm-5">Product: <h3>{{best_sellers.prod_nbr}}</h3></div>
+		<div class="panel-body ">Total Amount: <h3>${{best_sellers.Total_Sales}}</h3></div>
+
+  </div>
+</div>
+
+<div class="container col-sm-6">
+  <div class="panel panel-default">
+    <div class="panel-heading">Sales Record</div>
+    <div class="panel-body col-sm-7">Date: <h3>{{sales_record.date}}</h3></div>
+		<div class="panel-body">Order quantity: <h3>{{sales_record.sum_ord_qty}}</h3></div>
+
+  </div>
+</div>
+{% endblock %}

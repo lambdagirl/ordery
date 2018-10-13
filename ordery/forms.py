@@ -1,9 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,SubmitField, TextAreaField, DateTimeField, IntegerField, PasswordField, SelectField
+from wtforms import Form,StringField,SubmitField, TextAreaField, DateTimeField, IntegerField, PasswordField, SelectField
 from wtforms.validators import DataRequired, ValidationError
 from flask_wtf.file import FileField, FileAllowed, FileRequired
-
-
+from flask import request
 
 
 class CSVForm(FlaskForm):
@@ -34,3 +33,15 @@ class AddProductsForm(FlaskForm):
     color = StringField('color', validators = [DataRequired()])
     price = IntegerField('price', validators = [DataRequired()])
     submit = SubmitField('Submit')
+
+
+
+class SearchForm(FlaskForm):
+    q = StringField('Search', validators=[DataRequired()])
+
+    def __init__(self, *args, **kwargs):
+        if 'formdata' not in kwargs:
+            kwargs['formdata'] = request.args
+        if 'csrf_enabled' not in kwargs:
+            kwargs['csrf_enabled'] = False
+        super(SearchForm, self).__init__(*args, **kwargs)
