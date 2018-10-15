@@ -10,9 +10,8 @@ import os
 from flask import current_app
 from . product_csv import product_csv
 from . order_csv import order_csv
-from . date import create_date_table, create_view, get_weekly_data
+from . date import create_date_table, create_view, get_weekly_data, convert_row_list, convert_row_list_key
 from flask import g
-
 bp = Blueprint('orders', __name__)
 
 @bp.route('/', methods=['GET', 'POST'])
@@ -160,12 +159,26 @@ limit 1;
 def report():
     db = get_db()
     create_view()
-    labels = ["SUNDAY", "MONDAY", "TUESDAY","WEDNESDAY", "THURSDAY","FRIDAY","SATURDAY"]
-    rows = db.execute('SELECT ord_amt, day_name FROM v_ord;').fetchall()
-    values = get_weekly_data(rows)
-    print(values)
-    return render_template('report.html', values=values, labels=labels)
-
+    #labels = ["SUNDAY", "MONDAY", "TUESDAY","WEDNESDAY", "THURSDAY","FRIDAY","SATURDAY"]
+    #labels1 = ['JUL', 'AUG', 'SEP']
+    ord_qty_rows = db.execute('SELECT sum(ord_qty) as total, day_name FROM v_ord group by day_name order by total desc;').fetchall()
+    values = convert_row_list(ord_qty_rows)
+    labels =convert_row_list_key(ord_qty_rows)
+    ord_amt_rows =db.execute('SELECT sum(ord_amt), month FROM v_ord group by month order by month asc;').fetchall()
+    values1 = convert_row_list(ord_amt_rows)
+    labels1 = convert_row_list_key(ord_amt_rows)
+    ord_amt_pro_nbr_rows = db.execute('SELECT sum(ord_amt), prod_nbr FROM v_ord group by prod_nbr order by sum(ord_amt) desc;').fetchall()
+    values2 = convert_row_list(ord_amt_pro_nbr_rows)
+    labels2 = convert_row_list_key(ord_amt_pro_nbr_rows)
+    ord_qty_color_rows = db.execute('SELECT sum(ord_qty),  color FROM v_ord group by color;').fetchall()
+    values3 = convert_row_list(ord_qty_color_rows)
+    labels3 = convert_row_list_key(ord_qty_color_rows)
+    ord_qty_size_rows = db.execute('SELECT sum(ord_qty), size FROM v_ord group by size').fetchall()
+    values4 = convert_row_list(ord_qty_size_rows)
+    labels4  = convert_row_list_key(ord_qty_size_rows)
+    return render_template('report.html', values=values, labels=labels,
+        labels1=labels1,labels2=labels2, values1 = values1, values2 = values2,
+        labels3 = labels3, values3 = values3, labels4 = labels4, values4 = values4)
 
 @bp.before_app_request
 def before_request():

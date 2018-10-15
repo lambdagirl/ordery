@@ -90,3 +90,15 @@ def get_weekly_data(rows):
     z.update(d_dict) #Combine lables and d_dict together
     data = list(z.values())
     return data
+
+def convert_row_list(rows):
+    d_dict = {};            # Initialize an empty dictionary
+    for i in rows: d_dict[i[1]] = (i[0]); # Create the key i[0] and values list
+    data = list(d_dict.values())
+    return data
+
+def convert_row_list_key(rows):
+    d_dict = {};            # Initialize an empty dictionary
+    for i in rows: d_dict[i[1]] = (i[0]); # Create the key i[0] and values list
+    data = list(d_dict.keys())
+    return data

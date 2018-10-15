@@ -2,49 +2,76 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block page_content %}
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h2">Dashboard</h1>
-  <div class="btn-toolbar mb-2 mb-md-0">
-    <div class="btn-group mr-2">
-      <button class="btn btn-sm btn-outline-secondary">Share</button>
-      <button class="btn btn-sm btn-outline-secondary">Export</button>
-    </div>
-    <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
-      <span data-feather="calendar"></span>
-      This week
-    </button>
+<div class = 'col-sm-12'>
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h3 class="h4">Order quantity summary by days name</h3>
+  </div>
+  <div>
+  <canvas class="my-4 w-100" id="myChart" width="900" height="300"></canvas>
   </div>
 </div>
-        <div>
-          <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
-        </div>
+<div class = 'col-sm-12'>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+<h3 class="h4">Sales amount summary by month</h3>
+</div>
+<div>
+<canvas class="my-4 w-100" id="Chart" width="900" height="300"></canvas>
+</div>
+</div>
+<div class = 'col-sm-12'>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+<h3 class="h4">Sales amount summary by product number</h3>
+</div>
+<div>
+<canvas class="my-4 w-100" id="Chart3" width="900" height="300"></canvas>
+</div>
+</div>
+<div class = 'col-sm-6'>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+<h3 class="h4">Ordery quantity summary by product color</h3>
+</div>
+<div>
+<canvas class="my-4 w-100" id="Chart4" width="900" height="500"></canvas>
+</div>
+</div>
+<div class = 'col-sm-6'>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+<h3 class="h4">Ordery quantity summary by product size</h3>
+</div>
+<div>
+<canvas class="my-4 w-100" id="Chart5" width="900" height="500"></canvas>
+</div>
+</div>
 
       <!-- Graphs -->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
       <script>
         var ctx = document.getElementById("myChart");
         var myChart = new Chart(ctx, {
-          type: 'line',
+          type: 'bar',
           data: {
-						labels : [{% for item in labels %}
-             "{{item}}",
+						labels : [{% for label in labels %}
+             "{{label}}",
             {% endfor %}],
             datasets: [{
-							data : [{% for item in values %}
-                {{item}},
+							data : [{% for value in values %}
+                {{value}},
               {% endfor %}],
               lineTension: 0,
-              backgroundColor: 'transparent',
+              backgroundColor: '#007bff',
               borderColor: '#007bff',
               borderWidth: 4,
               pointBackgroundColor: '#007bff'
             }]
           },
           options: {
+            title: {
+					text: 'Order quantity sumary by day name'
+				},
             scales: {
               yAxes: [{
                 ticks: {
-                  beginAtZero: false
+                  beginAtZero: true
                 }
               }]
             },
@@ -54,4 +81,161 @@
           }
         });
       </script>
+
+
+
+    <!-- Graphs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+    <script>
+      var ctx = document.getElementById("Chart");
+      var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels : [{% for label in labels1 %}
+           "{{label}}",
+          {% endfor %}],
+          datasets: [{
+            data : [{% for value in values1 %}
+              {{value}},
+            {% endfor %}],
+            lineTension: 0,
+            backgroundColor: 'transparent',
+            borderColor: '#007bff',
+            borderWidth: 4,
+            pointBackgroundColor: '#007bff'
+          }]
+        },
+        options: {
+          title: {
+        text: 'Order amount sumary by month'
+      },
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          },
+          legend: {
+            display: false,
+          }
+        }
+      });
+    </script>
+
+
+          <!-- Graphs -->
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+          <script>
+            var ctx = document.getElementById("Chart3");
+            var myChart = new Chart(ctx, {
+              type: 'bar',
+              data: {
+    						labels : [{% for label in labels2 %}
+                 "{{label}}",
+                {% endfor %}],
+                datasets: [{
+    							data : [{% for value in values2 %}
+                    {{value}},
+                  {% endfor %}],
+                  lineTension: 0,
+                  backgroundColor: '#007bff',
+                  borderColor: '#007bff',
+                  borderWidth: 4,
+                  pointBackgroundColor: '#007bff'
+                }]
+              },
+              options: {
+                title: {
+    					text: 'Order quantity sumary by day name'
+    				},
+                scales: {
+                  yAxes: [{
+                    ticks: {
+                      beginAtZero: true
+                    }
+                  }]
+                },
+                legend: {
+                  display: false,
+                }
+              }
+            });
+          </script>
+          <!-- Graphs -->
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+          <script>
+            var ctx = document.getElementById("Chart4");
+            var myChart = new Chart(ctx, {
+              type: 'bar',
+              data: {
+    						labels : [{% for label in labels3 %}
+                 "{{label}}",
+                {% endfor %}],
+                datasets: [{
+    							data : [{% for value in values3 %}
+                    {{value}},
+                  {% endfor %}],
+                  lineTension: 0,
+                  backgroundColor: '#007bff',
+                  borderColor: '#007bff',
+                  borderWidth: 4,
+                  pointBackgroundColor: '#007bff'
+                }]
+              },
+              options: {
+                title: {
+    					text: 'Order quantity sumary by day name'
+    				},
+                scales: {
+                  yAxes: [{
+                    ticks: {
+                      beginAtZero: true
+                    }
+                  }]
+                },
+                legend: {
+                  display: false,
+                }
+              }
+            });
+          </script>
+          <!-- Graphs -->
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+          <script>
+            var ctx = document.getElementById("Chart5");
+            var myChart = new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels : [{% for label in labels4 %}
+                 "{{label}}",
+                {% endfor %}],
+                datasets: [{
+                  data : [{% for value in values4 %}
+                    {{value}},
+                  {% endfor %}],
+                  lineTension: 0,
+                  backgroundColor: '#007bff',
+                  borderColor: '#007bff',
+                  borderWidth: 4,
+                  pointBackgroundColor: '#007bff'
+                }]
+              },
+              options: {
+                title: {
+              text: 'Order quantity sumary by day name'
+            },
+                scales: {
+                  yAxes: [{
+                    ticks: {
+                      beginAtZero: true
+                    }
+                  }]
+                },
+                legend: {
+                  display: false,
+                }
+              }
+            });
+          </script>
 {% endblock %}
