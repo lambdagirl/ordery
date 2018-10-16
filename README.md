@@ -8,6 +8,9 @@ Features
 Install:
 
 export FLASK_APP=ordery
+
 export FLASK_ENV=development
+
 flask init-db
+
 flask run --port 8000
