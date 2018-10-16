@@ -5,7 +5,8 @@ Features
 3. Data visualization chart
 
 
-##Install:
+Install:
+
 export FLASK_APP=ordery
 export FLASK_ENV=development
 flask init-db
