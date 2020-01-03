@@ -15,7 +15,7 @@ from flask import g
 bp = Blueprint('orders', __name__)
 
 @bp.route('/', methods=['GET', 'POST'])
-@login_required
+# @login_required
 def index():
     db = get_db()
     form = AddOrdersForm()
@@ -57,7 +57,7 @@ def get_order(id):
 
 
 @bp.route('/delete/<int:id>')
-@login_required
+# @login_required
 def delete(id):
     order = get_order(id)
     db = get_db()
@@ -67,7 +67,7 @@ def delete(id):
     return redirect(url_for('orders.index'))
 
 @bp.route('/<int:id>/update', methods=('GET', 'POST'))
-@login_required
+# @login_required
 def update(id):
         order = get_order(id)
         form = AddOrdersForm()
@@ -95,7 +95,7 @@ def update(id):
 
 
 @bp.route('/csv', methods=('GET', 'POST'))
-@login_required
+# @login_required
 def upload_csv():
     form = CSVForm()
     if form.validate_on_submit():
@@ -119,7 +119,7 @@ def upload_csv():
 
 
 @bp.route('/dashboard', methods=('GET', 'POST'))
-@login_required
+# @login_required
 def dashboard():
     create_date_table()
     db = get_db()
@@ -155,7 +155,7 @@ limit 1;
 
 
 @bp.route('/report', methods=('GET', 'POST'))
-@login_required
+# @login_required
 def report():
     db = get_db()
     create_view()
