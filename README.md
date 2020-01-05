@@ -1,4 +1,5 @@
 # Ordery
+
 Features
 1. Search function
 2. Upload from CSV
@@ -6,6 +7,8 @@ Features
 
 
 Install:
+
+pip install flask
 
 export FLASK_APP=ordery
 
