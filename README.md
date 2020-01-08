@@ -16,4 +16,4 @@ export FLASK_ENV=development
 
 flask init-db
 
-flask run --port 8000
+python flask run --port 8000
